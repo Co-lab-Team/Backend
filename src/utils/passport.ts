@@ -86,9 +86,8 @@ passport.use(
 passport.use(
   new GoogleStrtegy(
     {
-      clientID:
-        "599847122048-vn5snb425g7jdfrui7s0kkrh9i3uubhp.apps.googleusercontent.com",
-      clientSecret: "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",
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: "https://localhost:3000/api/v1/auth/google/callback",
     },
     async function (accessToken, refreshToken, profile, done) {
