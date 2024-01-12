@@ -36,7 +36,7 @@ function keepAlive(url) {
 
 // cron job to ping the server every minute and delete expired tokens every 5 minutes
 cron.schedule("*/5 * * * *", () => {
-  keepAlive("//");
+  keepAlive("https://coallab.onrender.com");
   deleteExpiredTokens();
   console.log("deleting expired tokens every 5 minutes");
   console.log("pinging the server every minute");
