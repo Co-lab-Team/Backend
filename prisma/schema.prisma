@@ -2,196 +2,205 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 // schema.prisma
 
 // Define Models
 model User {
-  userID                  String                    @id @unique @default(uuid())
-  email                   String                    @unique
-  password                String
-  bio                     String?
-  profileImage            String?
-  coverImage              String?
-  googleAccountID         String?
-  displayName             String?
-  firstName               String
-  lastName                String
-  Role                    Roles                     @default(User)
-  slug                    String                    @unique
-  otp_enabled             Boolean                   @default(false)
-  otp_verified            Boolean                   @default(false)
-  isVerified              Boolean                   @default(false)
-  templates               Template[]
-  otp                     OTP?
-  passwordReset           PasswordReset?
-  payment                 Payment[]
-  userSupportTicket       UserSupportTicket[]
-  creatorVerification     CreatorVerification?
-  privacySetting          PrivacySetting[]
-  notificationPreferences NotificationPreferences[]
-  notifications           Notification[]
-  socialLinks             SocialLink[]
+    userID                  String                    @id @unique @default(uuid())
+    email                   String                    @unique
+    password                String
+    bio                     String?
+    profileImage            String?
+    coverImage              String?
+    googleAccountID         String?
+    displayName             String?
+    firstName               String
+    lastName                String
+    Role                    Roles                     @default(User)
+    slug                    String                    @unique
+    otp_enabled             Boolean                   @default(false)
+    otp_verified            Boolean                   @default(false)
+    isVerified              Boolean                   @default(false)
+    templates               Template[]
+    otp                     OTP?
+    passwordReset           PasswordReset?
+    payment                 Payment[]
+    userSupportTicket       UserSupportTicket[]
+    creatorVerification     CreatorVerification?
+    privacySetting          PrivacySetting[]
+    notificationPreferences NotificationPreferences[]
+    notifications           Notification[]
+    socialLinks             SocialLink[]
+    Verification            Verification[]
 }
 
 model Template {
-  templateID  String              @id @unique @default(uuid())
-  title       String
-  description String
-  fileSize    Float               @default(0)
-  createdAt   DateTime            @default(now())
-  lastUpdate  DateTime            @default(now())
-  isPublic    Boolean             @default(false)
-  slug        String              @unique
-  creator     User                @relation(fields: [creatorID], references: [userID])
-  creatorID   String
-  pages       Page[]
-  colors      Color[]
-  comments    Comment[]
-  ratings     Rating[]
-  analytics   TemplateAnalytics[] @relation("analytics")
-  Payment     Payment[]
+    templateID  String              @id @unique @default(uuid())
+    title       String
+    description String
+    fileSize    Float               @default(0)
+    createdAt   DateTime            @default(now())
+    lastUpdate  DateTime            @default(now())
+    isPublic    Boolean             @default(false)
+    slug        String              @unique
+    creator     User                @relation(fields: [creatorID], references: [userID])
+    creatorID   String
+    pages       Page[]
+    colors      Color[]
+    comments    Comment[]
+    ratings     Rating[]
+    analytics   TemplateAnalytics[] @relation("analytics")
+    Payment     Payment[]
+}
+
+model Verification {
+    userID           String   @id
+    verificationCode String
+    timestamp        DateTime @default(now())
+    status           String?
+    user             User     @relation(fields: [userID], references: [userID])
 }
 
 model Page {
-  pageID     String   @id @unique @default(uuid())
-  title      String
-  image      String[]
-  template   Template @relation(fields: [templateID], references: [templateID])
-  templateID String
+    pageID     String   @id @unique @default(uuid())
+    title      String
+    image      String[]
+    template   Template @relation(fields: [templateID], references: [templateID])
+    templateID String
 }
 
 model TemplateAnalytics {
-  analyticsID String     @id @unique @default(uuid())
-  template    Template[] @relation("analytics")
-  templateID  String
-  downloads   Int
-  viewCount   Int
-  revenue     Int
+    analyticsID String     @id @unique @default(uuid())
+    template    Template[] @relation("analytics")
+    templateID  String
+    downloads   Int
+    viewCount   Int
+    revenue     Int
 }
 
 model Color {
-  colorID    String   @id @unique @default(uuid())
-  hexCode    String
-  template   Template @relation(fields: [templateID], references: [templateID])
-  templateID String
+    colorID    String   @id @unique @default(uuid())
+    hexCode    String
+    template   Template @relation(fields: [templateID], references: [templateID])
+    templateID String
 }
 
 model Comment {
-  commentID  String   @id @unique @default(uuid())
-  message    String
-  template   Template @relation(fields: [templateID], references: [templateID])
-  templateID String
+    commentID  String   @id @unique @default(uuid())
+    message    String
+    template   Template @relation(fields: [templateID], references: [templateID])
+    templateID String
 }
 
 model Rating {
-  ratingID           String    @id @unique @default(uuid())
-  value              Float
-  Template           Template? @relation(fields: [templateTemplateID], references: [templateID])
-  templateTemplateID String?
+    ratingID           String    @id @unique @default(uuid())
+    value              Float
+    Template           Template? @relation(fields: [templateTemplateID], references: [templateID])
+    templateTemplateID String?
 }
 
 model OTP {
-  otpID     String   @id @unique @default(uuid())
-  code      String
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userID], references: [userID])
-  userID    String   @unique
+    otpID     String   @id @unique @default(uuid())
+    code      String
+    createdAt DateTime @default(now())
+    user      User     @relation(fields: [userID], references: [userID])
+    userID    String   @unique
 }
 
 model PasswordReset {
-  userID          String   @id
-  resetCode       String
-  expiryTimeStamp DateTime
-  status          Boolean  @default(false)
-  user            User     @relation(fields: [userID], references: [userID])
+    userID          String   @id
+    resetCode       String
+    expiryTimeStamp DateTime
+    status          Boolean  @default(false)
+    user            User     @relation(fields: [userID], references: [userID])
 }
 
 model Payment {
-  paymentID       String   @id @unique @default(uuid())
-  amount          Float
-  user            User     @relation(fields: [userID], references: [userID])
-  userID          String
-  template        Template @relation(fields: [templateID], references: [templateID])
-  templateID      String
-  transactionDate DateTime @default(now())
+    paymentID       String   @id @unique @default(uuid())
+    amount          Float
+    user            User     @relation(fields: [userID], references: [userID])
+    userID          String
+    template        Template @relation(fields: [templateID], references: [templateID])
+    templateID      String
+    transactionDate DateTime @default(now())
 }
 
 model PrivacySetting {
-  privacySettingID String  @id @unique @default(uuid())
-  userID           String
-  isPublic         Boolean @default(true)
-  user             User    @relation(fields: [userID], references: [userID])
+    privacySettingID String  @id @unique @default(uuid())
+    userID           String
+    isPublic         Boolean @default(true)
+    user             User    @relation(fields: [userID], references: [userID])
 }
 
 model SocialLink {
-  linkID       String @id @unique @default(uuid())
-  websiteURL   String
-  twitterURL   String
-  githubURL    String
-  instagramURL String
-  user         User   @relation(fields: [userID], references: [userID])
-  userID       String
+    linkID       String @id @unique @default(uuid())
+    websiteURL   String
+    twitterURL   String
+    githubURL    String
+    instagramURL String
+    user         User   @relation(fields: [userID], references: [userID])
+    userID       String
 }
 
 model UserSupportTicket {
-  ticketID         String  @id @unique @default(uuid())
-  user             User    @relation(fields: [userID], references: [userID])
-  userID           String
-  issueDescription String
-  active           Boolean @default(true)
+    ticketID         String  @id @unique @default(uuid())
+    user             User    @relation(fields: [userID], references: [userID])
+    userID           String
+    issueDescription String
+    active           Boolean @default(true)
 }
 
 model CreatorVerification {
-  verificationID String  @id @unique @default(uuid())
-  status         Boolean @default(false)
-  creator        User    @relation(fields: [creatorID], references: [userID])
-  creatorID      String  @unique
+    verificationID String  @id @unique @default(uuid())
+    status         Boolean @default(false)
+    creator        User    @relation(fields: [creatorID], references: [userID])
+    creatorID      String  @unique
 }
 
 model NotificationPreferences {
-  notificationPreferencesID String           @id @unique @default(uuid())
-  user                      User             @relation(fields: [userID], references: [userID])
-  userID                    String
-  type                      NotificationType
-  push                      Boolean          @default(true)
-  email                     Boolean          @default(false)
-  createdAt                 DateTime         @default(now())
+    notificationPreferencesID String           @id @unique @default(uuid())
+    user                      User             @relation(fields: [userID], references: [userID])
+    userID                    String
+    type                      NotificationType
+    push                      Boolean          @default(true)
+    email                     Boolean          @default(false)
+    createdAt                 DateTime         @default(now())
 }
 
 model Notification {
-  notificationID String           @id @unique @default(uuid())
-  user           User             @relation(fields: [userID], references: [userID])
-  userID         String
-  type           NotificationType
-  message        String
-  read           Boolean          @default(false)
-  createdAt      DateTime         @default(now())
+    notificationID String           @id @unique @default(uuid())
+    user           User             @relation(fields: [userID], references: [userID])
+    userID         String
+    type           NotificationType
+    message        String
+    read           Boolean          @default(false)
+    createdAt      DateTime         @default(now())
 }
 
 // Define Enums
 enum Roles {
-  Admin
-  User
-  Creator
+    Admin
+    User
+    Creator
 }
 
 enum Compactibility {
-  Figma
-  Framer
-  WordPress
+    Figma
+    Framer
+    WordPress
 }
 
 enum NotificationType {
-  TEMPLATE_UPDATE
-  TEMPLATE_DOWNLOADED
-  TEMPLATE_REMOVED
-  TEMPLATE_INTERACTION
+    TEMPLATE_UPDATE
+    TEMPLATE_DOWNLOADED
+    TEMPLATE_REMOVED
+    TEMPLATE_INTERACTION
 }

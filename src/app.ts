@@ -4,7 +4,7 @@ import { sayHelloController } from "./controllers/index";
 import "dotenv/config";
 import { errorHandler } from "./middlewares/index";
 import session from "express-session";
-// import passport from "./utils/passport";
+import passport from "./utils/passport";
 import deleteExpiredTokens from "./utils/deletetoken";
 import cors, { CorsOptions } from "cors";
 import morgan from "morgan";
@@ -47,18 +47,18 @@ cron.schedule("*/5 * * * *", () => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-// app.use(
-//   session({
-//     secret: process.env.JWT_SECRET || "secret",
-//     resave: true,
-//     saveUninitialized: true,
-//   })
-// );
+app.use(
+  session({
+    secret: process.env.JWT_SECRET || "secret",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
 
 app.use(cookieParser());
 
-// app.use(passport.initialize());
-// app.use(passport.session());
+app.use(passport.initialize());
+app.use(passport.session());
 
 // app.use(authToken);
 

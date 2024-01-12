@@ -555,10 +555,10 @@ export const generateOTP = async (
         userID: userID,
       },
       update: {
-        otp: token,
+        code: token,
       },
       create: {
-        otp: token,
+        code: token,
         userID: userID,
       },
     });
@@ -626,7 +626,7 @@ export const verifyOTP = async (
 
     const otp = await prisma.oTP.findFirst({
       where: {
-        otp: token,
+        code: token,
         userID: userID,
       },
     });
@@ -703,7 +703,7 @@ export const validateOTP = async (
 
     const otp = await prisma.oTP.findFirst({
       where: {
-        otp: token,
+        code: token,
         userID: userID,
       },
     });

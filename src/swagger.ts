@@ -10,11 +10,11 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:4000/",
+        url: "http://localhost:3000/",
         description: "Local server",
       },
       {
-        url: "https://coallab-qo6d.onrender.com/",
+        url: "https://coallab.onrender.com/",
         description: "Live server",
       },
     ],
