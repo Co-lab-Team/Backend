@@ -49,10 +49,12 @@ model Template {
     fileSize    Float               @default(0)
     createdAt   DateTime            @default(now())
     lastUpdate  DateTime            @default(now())
-    isPublic    Boolean             @default(false)
+    isPublic    Boolean             @default(true)
     slug        String              @unique
     creator     User                @relation(fields: [creatorID], references: [userID])
     creatorID   String
+    compactible Compactibility      @default(Figma)
+    tags        String[]
     pages       Page[]
     colors      Color[]
     comments    Comment[]
