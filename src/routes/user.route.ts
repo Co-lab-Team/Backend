@@ -11,8 +11,8 @@ const router = Router()
 /**
  * @swagger
  * tags:
- *   name: User Profile
- *   description: User Profile routes
+ *   name: User
+ *   description: User profile routes
  */
 
 /**
@@ -44,6 +44,12 @@ router.get('/user', getAllUsers)
  *   get:
  *     summary: Get a user by id.
  *     description: View a user profile.
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         description: The ID of the user to update.
+ *         required: true
+ *         type: string
  *     responses:
  *       '200':
  *         description: Successful
@@ -108,7 +114,7 @@ router.get('/user/:id', getUser)
  *               type: boolean
  *             isVerified:
  *               type: boolean
- *             // Add other properties based on your Prisma User schema
+ *             # Add other properties based on your Prisma User schema
  *         example:
  *           email: "updated@example.com"
  *           password: "newpassword"
@@ -139,7 +145,7 @@ router.get('/user/:id', getUser)
  *                   properties:
  *                     email:
  *                       type: string
- *                     // Add other properties based on your Prisma User schema
+ *                     # Add other properties based on your Prisma User schema
  *                 statusCode:
  *                   type: integer
  *       '400':
@@ -170,9 +176,8 @@ router.get('/user/:id', getUser)
  *                 'Input Error':
  *                   type: string
  *     tags:
- *       - user
+ *       - User
  */
-
 router.patch('/user/:id', updateUser)
 
 /**
@@ -197,6 +202,5 @@ router.patch('/user/:id', updateUser)
  *       - User
  */
 router.delete('/user/:id', deleteUser)
-
 
 module.exports = router
