@@ -17,6 +17,20 @@ import {
   signWithGoogle,
 } from "../controllers/auth.controller";
 
+import {
+  registerSchema,
+  loginSchema,
+  signWithGoogleSchema,
+  verifyEmailSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
+  verifyTokenSchema,
+  generateOTPSchema,
+  verifyUserIDSchema,
+} from "../middlewares/validations/auth.zod";
+
+import { validationMiddleware } from "../middlewares/validationMiddleware";
+
 // import { confirmPasswordChange } from "../controllers/user.controller";
 
 import { authenticateJWT } from "../middlewares/auth";
@@ -104,7 +118,7 @@ const router: Router = express.Router();
  *               $ref: '#/components/schemas/Error'
  */
 
-router.post("/register", register);
+router.post("/register", validationMiddleware(registerSchema), register);
 
 /**
  * @swagger
@@ -132,9 +146,13 @@ router.post("/register", register);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post("/login", login);
+router.post("/login", validationMiddleware(loginSchema), login);
 
-router.post("/login/google", signWithGoogle);
+router.post(
+  "/login/google",
+  validationMiddleware(signWithGoogleSchema),
+  signWithGoogle
+);
 
 /**
  * @swagger
@@ -270,7 +288,12 @@ router.get("/protected", authenticateJWT, (req, res) => {
  *               $ref: '#/components/schemas/Error'
  */
 
-router.get("/signupverification/:userID", sendSignUpVerification);
+router.get(
+  "/signupverification/:userID",
+  validationMiddleware(verifyUserIDSchema),
+  sendSignUpVerification
+);
+
 /**
  * @swagger
  * /api/v1/verify/:userID:
@@ -303,7 +326,7 @@ router.get("/signupverification/:userID", sendSignUpVerification);
  *               $ref: '#/components/schemas/Error'
  */
 
-router.get("/verify", verifyUser);
+router.get("/verify", validationMiddleware(verifyTokenSchema), verifyUser);
 
 /**
  * @swagger
@@ -341,7 +364,12 @@ router.get("/verify", verifyUser);
  *               $ref: '#/components/schemas/Error'
  */
 
-router.post("/generate-otp/:id", generateOTP);
+router.post(
+  "/generate-otp/:id",
+  validationMiddleware(generateOTPSchema),
+  generateOTP
+);
+
 /**
  * @swagger
  * /api/v1/verify-otp:
@@ -374,7 +402,7 @@ router.post("/generate-otp/:id", generateOTP);
  *               $ref: '#/components/schemas/Error'
  */
 
-router.post("/verify-otp", verifyOTP);
+router.post("/verify-otp", validationMiddleware(verifyTokenSchema), verifyOTP);
 /**
  * @swagger
  * /api/v1/validate-otp:
@@ -407,7 +435,11 @@ router.post("/verify-otp", verifyOTP);
  *               $ref: '#/components/schemas/Error'
  */
 
-router.post("/validate-otp", validateOTP);
+router.post(
+  "/validate-otp",
+  validationMiddleware(verifyEmailSchema),
+  validateOTP
+);
 /**
  * @swagger
  * /api/v1/disable-otp/{id}:
@@ -435,7 +467,11 @@ router.post("/validate-otp", validateOTP);
  *               $ref: '#/components/schemas/Error'
  */
 
-router.post("/disable-otp/:id", disableOTP);
+router.post(
+  "/disable-otp/:id",
+  validationMiddleware(verifyUserIDSchema),
+  disableOTP
+);
 
 /**
  * @swagger
@@ -466,7 +502,11 @@ router.post("/disable-otp/:id", disableOTP);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post("/reset-password", resetPassword);
+router.post(
+  "/reset-password",
+  validationMiddleware(forgotPasswordSchema),
+  resetPassword
+);
 
 /**
  * @swagger
@@ -521,7 +561,11 @@ router.get("/reset-password", confirmUserExists);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.patch("/reset-password", updateUserPassword);
+router.patch(
+  "/reset-password",
+  validationMiddleware(resetPasswordSchema),
+  updateUserPassword
+);
 
 /**
  * @swagger

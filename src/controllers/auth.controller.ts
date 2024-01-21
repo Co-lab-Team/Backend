@@ -115,7 +115,9 @@ export const register: RequestHandler = async (
 
     //send confirmation email
 
-    sendSignUpVerificationEmail(createdUser);
+    if ((await sendSignUpVerificationEmail(createdUser)) !== true) {
+      throw new InternalServerError("Error sending email");
+    }
 
     const userWithoutPassword = {
       email: createdUser.email,
@@ -232,9 +234,10 @@ export const signWithGoogle: RequestHandler = async (
     });
 
     const token = generateToken(createdUser);
-    //send confirmation email
 
-    sendSignUpVerificationEmail(createdUser);
+    if ((await sendSignUpVerificationEmail(createdUser)) !== true) {
+      throw new InternalServerError("Error sending email");
+    }
 
     const userWithoutPassword = {
       userID: createdUser.userID,
@@ -338,8 +341,11 @@ const sendSignUpVerificationEmail = async (user: any) => {
       },
       signUpVerificationEmailPath
     );
+
+    return true;
   } catch (error) {
-    console.log(error);
+    //   return the error
+    return false;
   }
 };
 
@@ -450,7 +456,9 @@ export const sendSignUpVerification = async (
       throw new BadRequestError("User does not exist");
     }
 
-    sendSignUpVerificationEmail(user);
+    if ((await sendSignUpVerificationEmail(user)) !== true) {
+      throw new InternalServerError("Error sending email");
+    }
 
     return ResponseHandler.success(
       res,
