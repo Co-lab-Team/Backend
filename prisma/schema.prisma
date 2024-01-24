@@ -51,6 +51,7 @@ model Template {
     lastUpdate  DateTime            @default(now())
     isPublic    Boolean             @default(true)
     slug        String              @unique
+    templateURL String
     creator     User                @relation(fields: [creatorID], references: [userID])
     creatorID   String
     compactible Compactibility      @default(Figma)
