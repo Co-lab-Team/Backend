@@ -19,7 +19,7 @@ export const createTemplate: RequestHandler = async (
   next: NextFunction
 ) => {
   try {
-    const { title, description, fileSize, template, category, tags } = req.body;
+    const { title, description, compactible, tags } = req.body;
     const { userID } = req.params;
 
     const file = req.file as any;
@@ -53,7 +53,7 @@ export const createTemplate: RequestHandler = async (
         description,
         fileSize: size,
         templateURL: url,
-        category,
+        compactible: compactible,
         tags,
         slug,
         creatorID: userID,
