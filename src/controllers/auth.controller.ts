@@ -14,7 +14,7 @@ import { slugify } from "../services/slugify";
 import jwt from "jsonwebtoken";
 import * as OTPAuth from "otpauth";
 import { encode } from "hi-base32";
-import crypto from "crypto";
+import crypto, { UUID } from "crypto";
 import { emailService } from "../services/mailer";
 const path = require("path");
 
@@ -51,6 +51,19 @@ const signUpVerificationEmailPath = path.join(
   "email",
   "signupverification.mjml"
 );
+
+// check if user exists with either email or userID
+const checkUserExists = async (email: string, userID: string) => {
+  const user = await prisma.user.findFirst({
+    where: {
+      OR: [{ email: email }, { userID: userID }],
+    },
+  });
+
+  if (!user) {
+    throw new BadRequestError("User does not exist");
+  }
+};
 
 // Assuming you have a secret for JWT signing
 const jwtSecret = process.env.JWT_SECRET;
