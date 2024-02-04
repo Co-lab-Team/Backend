@@ -89,7 +89,7 @@ export const emailService = async (emailContent, templatePath) => {
     const dynamicHTML = mjmlOutput.html;
 
     const finalEmailContent = {
-      from: "hello@Evento.com",
+      from: "hello@coallab.com",
       to,
       subject,
       html: dynamicHTML,
