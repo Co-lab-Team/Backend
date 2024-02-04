@@ -218,7 +218,7 @@ router.delete("/logout", function (req, res, next) {
       if (err) {
         return next(err);
       }
-      return res.redirect("https://evento1.vercel.app");
+      return res.redirect("https://coallab.onrender.com/");
     });
   }
 });

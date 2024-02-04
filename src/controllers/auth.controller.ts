@@ -339,7 +339,7 @@ const sendSignUpVerificationEmail = async (user: any) => {
       },
     });
 
-    const mailedToken = `https://evento-qo6d.onrender.com/api/v1/verify?token=${confirmationToken}`;
+    const mailedToken = `https://coallab.onrender.com/api/v1/verify?token=${confirmationToken}`;
 
     const emailVariables = {
       userName: user.firstName,
@@ -349,7 +349,7 @@ const sendSignUpVerificationEmail = async (user: any) => {
     emailService(
       {
         to: user.email,
-        subject: "Verify Your Evento Account",
+        subject: "Verify Your Coallab Templates Account",
         variables: emailVariables,
       },
       signUpVerificationEmailPath
@@ -440,7 +440,7 @@ export const verifyUser = async (
         "Error sending password change confirmation email"
       );
     }
-    res.redirect("https://evento1.vercel.app/dashboard");
+    res.redirect("https://coallab.onrender.com/dashboard");
     // return ResponseHandler.success(
     //   res,
     //   updatedUser,
@@ -869,7 +869,7 @@ export const resetPassword = async (
       },
     });
 
-    const mailedToken = `https://evento-qo6d.onrender.com/api/v1/reset-password?token=${confirmationToken}`;
+    const mailedToken = `https://coallab.onrender.com/api/v1/reset-password?token=${confirmationToken}`;
 
     // Send the confirmation email
     const emailVariables = {
@@ -958,7 +958,7 @@ export const confirmUserExists = async (
           throw new BadRequestError("Cannot Redirect User");
         }
         return res.redirect(
-          `https://evento1.vercel.app/resetpassword/${userID}/${token}`
+          `https://coallab.onrender.com/resetpassword/${userID}/${token}`
         );
       });
     }
@@ -1058,7 +1058,7 @@ export const updateUserPassword = async (
         if (err) {
           throw new BadRequestError("Cannot Redirect User");
         }
-        return res.redirect("https://evento1.vercel.app");
+        return res.redirect("https://coallab.onrender.com/");
       });
     }
   } catch (error) {
